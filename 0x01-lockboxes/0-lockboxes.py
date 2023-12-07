@@ -6,6 +6,7 @@ Problem: You have n number of locked boxes in front of you.
          and each box may contain keys to the other boxes.
 """
 
+
 def canUnlockAll(boxes):
     """
     Function that checks with boolean value the list type and
