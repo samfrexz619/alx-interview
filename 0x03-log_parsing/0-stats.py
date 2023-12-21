@@ -38,7 +38,7 @@ try:
     for key in sorted(codes):
         print("{}: {}".format(key, codes[key]))
 
-except KeyboardInterrupt:
+finally:
     print("File size: {}".format(size))
     for key in sorted(codes):
         print("{}: {}".format(key, codes[key]))
