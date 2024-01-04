@@ -8,29 +8,24 @@ def validUTF8(data):
     """
     Dets if a given data set represents a valid UTF-8 encoding
     """
-    count = 0
 
-    for x in data:
+    nbytes = 0
 
-        if 191 >= x >= 128:
+    b1 = 1 << 7
+    b2 = 1 << 6
 
-            if not count:
-                return False
-
-            count -= 1
-        else:
-            if count:
-                return False
-
-            if x < 128:
+    for i in data:
+        b = 1 << 7
+        if nbytes == 0:
+            while b & i:
+                nbytes += 1
+                b = b >> 1
+            if nbytes == 0:
                 continue
-            elif x < 224:
-                count = 1
-            elif x < 240:
-                count = 2
-            elif x < 248:
-                count = 3
-            else:
+            if nbytes == 1 or nbytes > 4:
                 return False
-
-    return count == 0
+        else:
+            if not (i & b1 and not (i & b2)):
+                return False
+        nbytes -= 1
+    return nbytes == 0
