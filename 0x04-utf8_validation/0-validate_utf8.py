@@ -6,31 +6,31 @@ validUTF8
 
 def validUTF8(data):
     """
-    Bit manipulationbthat determines if a given data
-    set represents a valid UTF-8 encoding
-    Args:
-        data: data will be rep by a list
-              of int
-    Return: True or False
+    Dets if a given data set represents a valid UTF-8 encoding
     """
-
-    n_bytes = 0
-
-    m1 = 1 << 7
-    m2 = 1 << 6
+    count = 0
 
     for x in data:
-        m = 1 << 7
-        if n_bytes == 0:
-            while m & i:
-                n_bytes += 1
-                m = m >> 1
-            if n_bytes == 0:
-                continue
-            if n_bytes == 1 or n_bytes > 4:
+
+        if 191 >= x >= 128:
+
+            if not count:
                 return False
+
+            count -= 1
         else:
-            if not (x & m1 and not (x & m2)):
+            if count:
                 return False
-        n_bytes -= 1
-    return n_bytes == 0
+
+            if x < 128:
+                continue
+            elif x < 224:
+                count = 1
+            elif x < 240:
+                count = 2
+            elif x < 248:
+                count = 3
+            else:
+                return False
+
+    return count == 0
