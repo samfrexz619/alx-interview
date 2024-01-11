@@ -9,56 +9,68 @@
 import sys
 
 
-def solve(row, column):
-    """ """
-    solver = [[]]
-    for q in range(row):
-        solver = place_queen(q, column, solver)
-    return solver
+def is_safe(board, row, col, n):
+    ''' '''
+    for i in range(col):
+        if board[row][i] == 1:
+            return False
+    # Check if there is a queen in the upper diagonal
+    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+
+    # Check if there is a queen in the lower diagonal
+    for i, j in zip(range(row, n, 1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+
+    return True
 
 
-def place_queen(q, column, prev_solver):
-    solver_queen = []
-    for array in prev_solver:
-        for x in range(column):
-            if is_safe(q, x, array):
-                solver_queen.append(array + [x])
-    return solver_queen
+def solve_nqueens(board, col, n):
+    if col == n:
+        # All queens are placed, print the solution
+        print_solution(board, n)
+        return
+
+    for i in range(n):
+        if is_safe(board, i, col, n):
+            board[i][col] = 1
+            solve_nqueens(board, col + 1, n)
+            board[i][col] = 0  # backtrack
 
 
-def is_safe(q, x, array):
-    if x in array:
-        return (False)
-    else:
-        return all(abs(array[column] - x) != q - column
-                   for column in range(q))
+def print_solution(board, n):
+    for i in range(n):
+        for j in range(n):
+            print(board[i][j], end=' ')
+        print()
 
 
-def init():
+def nqueens_solver(n):
+    # Initialize the chessboard with zeros
+    board = [[0 for _ in range(n)] for _ in range(n)]
+
+    solve_nqueens(board, 0, n)
+
+
+if __name__ == "__main__":
+    # Check if the correct number of arguments is provided
     if len(sys.argv) != 2:
         print("Usage: nqueens N")
         sys.exit(1)
-    if sys.argv[1].isdigit():
-        the_queen = int(sys.argv[1])
-    else:
+
+    try:
+        # Parse the command-line argument as an integer
+        n = int(sys.argv[1])
+
+        # Check if N is greater than or equal to 4
+        if n < 4:
+            print("N must be at least 4")
+            sys.exit(1)
+
+        nqueens_solver(n)
+
+    except ValueError:
         print("N must be a number")
         sys.exit(1)
-    if the_queen < 4:
-        print("N must be at least 4")
-        sys.exit(1)
-    return(the_queen)
-
-
-def n_queens():
-
-    the_queen = init()
-    solver = solve(the_queen, the_queen)
-    for array in solver:
-        clean = []
-        for q, x in enumerate(array):
-            clean.append([q, x])
-        print(clean)
-
-
-if __name__ == '__main__':
-    n_queens()
