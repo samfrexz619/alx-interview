@@ -1,6 +1,6 @@
 #!/usr/bin/node
 
-const request = require('request');
+const req = require('request');
 
 const filmNum = process.argv[2] + '/';
 const filmURL = 'https://swapi-api.hbtn.io/api/films/';
@@ -16,7 +16,7 @@ request(filmURL + filmNum, async function (err, res, body) {
   // Make a req to each character URL
   for (const charURL of charURLList) {
     await new Promise(function (resolve, reject) {
-      request(charURL, function (err, res, body) {
+      req(charURL, function (err, res, body) {
         if (err) return console.error(err);
 
         // Parse the charcter formation & print the character's name
