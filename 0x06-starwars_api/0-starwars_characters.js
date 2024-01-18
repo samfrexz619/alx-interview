@@ -6,7 +6,7 @@ const filmNum = process.argv[2] + '/';
 const filmURL = 'https://swapi-api.hbtn.io/api/films/';
 
 // Makes an API request to get film information
-request(filmURL + filmNum, async function (err, res, body) {
+req(filmURL + filmNum, async function (err, res, body) {
   if (err) return console.error(err);
 
   // Parse the res body
